@@ -1,10 +1,6 @@
 data "aws_caller_identity" "current" {
 }
 
-data "aws_region" "current" {
-}
-
-
 module "tags" {
   source  = "rhythmictech/tags/terraform"
   version = "~> 1.1.1"
@@ -19,15 +15,15 @@ module "tags" {
 
 locals {
   account_id = data.aws_caller_identity.current.account_id
-  region     = data.aws_region.current.name
   tags       = module.tags.tags_no_name
 }
 
 resource "aws_kms_key" "this" {
   description             = "KMS key for encrypting notifications to Rhythmic"
-  enable_key_rotation     = false
+  enable_key_rotation     = false #tfsec:ignore:avd-aws-0065
   deletion_window_in_days = 10
   policy                  = data.aws_iam_policy_document.this.json
+  tags                    = local.tags
 }
 
 resource "aws_kms_alias" "this" {
@@ -50,7 +46,7 @@ data "aws_iam_policy_document" "this" {
   statement {
     effect = "Allow"
     actions = [
-      "kms:GenerateDateKey*",
+      "kms:GenerateDataKey*",
       "kms:Decrypt"
     ]
     resources = ["*"]
@@ -59,7 +55,8 @@ data "aws_iam_policy_document" "this" {
       type = "Service"
       identifiers = [
         "budgets.amazonaws.com",
-        "costalerts.amazonaws.com"
+        "costalerts.amazonaws.com",
+        "events.amazonaws.com"
       ]
     }
   }
