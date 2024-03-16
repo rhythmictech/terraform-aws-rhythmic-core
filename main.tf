@@ -1,6 +1,9 @@
 data "aws_caller_identity" "current" {
 }
 
+data "aws_partition" "current" {
+}
+
 module "tags" {
   source  = "rhythmictech/tags/terraform"
   version = "~> 1.1.1"
@@ -15,6 +18,7 @@ module "tags" {
 
 locals {
   account_id = data.aws_caller_identity.current.account_id
+  partition  = data.aws_partition.current.partition
   tags       = module.tags.tags_no_name
 }
 
@@ -39,7 +43,7 @@ data "aws_iam_policy_document" "this" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${local.account_id}:root"]
+      identifiers = ["arn:${local.partition}s:iam::${local.account_id}:root"]
     }
   }
 
