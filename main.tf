@@ -26,7 +26,6 @@ locals {
     "costalerts.amazonaws.com",
     "events.amazonaws.com"
     ] : [
-    "budgets.amazonaws.com",
     "events.amazonaws.com"
   ]
 
