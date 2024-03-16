@@ -20,6 +20,17 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
   partition  = data.aws_partition.current.partition
   tags       = module.tags.tags_no_name
+
+  principals = partition == "aws" ? [
+    "budgets.amazonaws.com",
+    "costalerts.amazonaws.com",
+    "events.amazonaws.com"
+    ] : [
+    "budgets.amazonaws.com",
+    "events.amazonaws.com"
+  ]
+
+
 }
 
 resource "aws_kms_key" "this" {
