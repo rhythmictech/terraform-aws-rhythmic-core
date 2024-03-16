@@ -21,7 +21,7 @@ locals {
   partition  = data.aws_partition.current.partition
   tags       = module.tags.tags_no_name
 
-  principals = partition == "aws" ? [
+  principals = local.partition == "aws" ? [
     "budgets.amazonaws.com",
     "costalerts.amazonaws.com",
     "events.amazonaws.com"
