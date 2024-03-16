@@ -68,11 +68,7 @@ data "aws_iam_policy_document" "this" {
 
     principals {
       type = "Service"
-      identifiers = [
-        "budgets.amazonaws.com",
-        "costalerts.amazonaws.com",
-        "events.amazonaws.com"
-      ]
+      identifiers = local.principals
     }
   }
 }
