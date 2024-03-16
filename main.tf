@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "this" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:${local.partition}s:iam::${local.account_id}:root"]
+      identifiers = ["arn:${local.partition}:iam::${local.account_id}:root"]
     }
   }
 
